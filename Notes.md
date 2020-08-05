@@ -4,8 +4,7 @@
 
 ### Create Project
 
-Yarn - ```yarn create react-app web --template typescript```
-
+Yarn - ```yarn create react-app web --template typescript```  
 Npm - ```npx create react-app web --template typescript```
 
 
@@ -92,5 +91,68 @@ interface PageHeaderProps {
   content: '';
 ```
 
+# Day 2
 
 
+## Theory
+
+- Mobile (React Native, Kontlin, Swift, Flutter)
+- Avoid send all HTML file again to front-end
+- RestAPI
+- HTML x JSON 
+- ReactJS - Streaming and Worker
+
+## Creating Server
+
+### First Steps
+
+- In server folder, run ```yarn init -y```
+- Package.json is createad. We will not follow any boilerplate, like front-end in the day 1
+- Create file ```server.ts```
+- Install the typescript in order to develop the API with Node - ```yarn add typescript -D``` (developer dependency)
+- Create typescript config - ```yarn tsc --init``` or ```npx tsc --init```
+- Change the "target": "es5", to "target": "es2017". The NodeJS only suport this of the typescript, for while.
+- Install the ts-node-dev with ```yarn add ts-node-dev -D```. Execute the server and listen if there is any modification in the server sources. If so, the server will be reloaded. 
+- Add the config below in package.json file:
+```
+"scripts": {
+    "start": "tsnd src/server.ts"
+  },
+```
+  - The flag ```transpile-only``` only compile the typescript to javascript. Error is not check
+  - The flag ```ignore-watch node_module```. Avoid to convert the node_module folder
+  - The flag ```respawn``` is used to run the server without finish it
+- Install **Express** micro framework - ```yarn add express```
+- The error when import some package, sometimes you have to install the package with @type. In express case, we can run ```yarn add @types/express -D```
+- insomnia.rest - test POST, DELETE
+- Request Body - request.body - body of the request - default do not understand JSON. It must import a express.json
+- Route Params: Identify which resource we want to update or delete
+- Query Params: Page, filter, sort
+- SQL - Relational DB - SQLite 
+- Migrations - version control of the database - CLI knex - We put everything we do in database
+- Knex execute with JS - so you have to create a file ```knexfile.ts```
+- Redefine the knex commands to execute migrations - See package.json
+```
+"scripts": {
+    "start": "tsnd --transpile-only --ignore-watch node_module --respawn src/server.ts",
+    "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
+    "knex:migrate:rollback": "knex --knexfile knexfile.ts migrate:rollback"
+  },
+```
+- Create files with numeric sort (see migrations folder)
+- Check migration API in knex website
+- Execute ```yarn knex:migrate``` to fill the table in db
+- Knex - Write SQL using JS - ```yarn add knex sqlit3```
+- Install SQLite vscode extension
+- The knex has table (**knex_migrations knex_migrations_lock**) in order to track the modifications that was applied in our database
+- 
+
+### Coding
+
+- Create routes - Return JSON 
+- Create app to listen a port
+- Each route is a URL of our application
+- HTTP: GET, POST, DELETE
+- When you interect with the database, it is recommend to use a async function
+- The database operations is the promisse in JS
+- JS use short syntaxe
