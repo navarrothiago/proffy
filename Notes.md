@@ -129,7 +129,7 @@ interface PageHeaderProps {
 - Route Params: Identify which resource we want to update or delete
 - Query Params: Page, filter, sort
 - SQL - Relational DB - SQLite 
-- Migrations - version control of the database - CLI knex - We put everything we do in database
+- Migrations - version control of the database - CLI **knex** - We put everything we do in database
 - Knex execute with JS - so you have to create a file ```knexfile.ts```
 - Redefine the knex commands to execute migrations - See package.json
 ```
@@ -145,7 +145,7 @@ interface PageHeaderProps {
 - Knex - Write SQL using JS - ```yarn add knex sqlit3```
 - Install SQLite vscode extension
 - The knex has table (**knex_migrations knex_migrations_lock**) in order to track the modifications that was applied in our database
-- 
+-  Install **cors** package - allow the frontend in 3000 port access the backend in port 3333 -  ```yarn add cors``` and ```yarn add @types/cors -D```
 
 ### Coding
 
@@ -156,3 +156,80 @@ interface PageHeaderProps {
 - When you interect with the database, it is recommend to use a async function
 - The database operations is the promisse in JS
 - JS use short syntaxe
+
+# Day 3
+
+## Introduction
+
+- Stack: NodeJs, React and ReactNative
+- UberEats, Netflix, Instagram uses
+- Unique library to deal with frontend, backend and mobile
+- **State** - in React, if we need to handle value inside a component, we need to use state. Use ``` import { useState } from 'react'```. If you need to manage the variable, you must not manage direct with the list. The React use the **Imutability** concept. Example:
+```
+const [scheduleItems, setScheduleItems] = useState([
+    { week_day: 0, from: '', to: '' }
+  ]);
+
+  function addNewScheduleItem() {
+    setScheduleItems([
+      ...scheduleItems,
+      { week_day: 0, from: '', to: '' }
+    ])
+  }
+```
+- After that, usually we define a onChange property to a arrow function in a element in order to call the **setXXXX** to update the value what we need, for instance:
+```
+<Input 
+  type="time" 
+  name="time" 
+  label="Hora"
+  value={time}
+  onChange={e => {setTime(e.target.value)}}
+></Input>
+```
+- **React declarative** - we can add a new element in screen. Different in HTML which we added a new element, it does not happen in React. Our interface is built from the informtation that is given for it
+
+## Coding
+
+- If you want to represent a block in a form, a tag **fildset** is used. The **legend** is a title in **fieldset**
+- **InputHTMLAttribuites** - Interface from React that define all attributes of the input HTML element
+- **Rest Operator** - JS - ```...rest```. Get the rest elements. 
+- **Spread Operator** - Use the operator to save in variables
+- The Spread operator lets you expand an iterable like a string, object or array into its elements while the Rest operator does the inverse by reducing a set of elemnts into one array
+- The first element inside the map must have a unique key
+
+## Connectiog Frontend and Backend
+
+- Install **axios** with ```yarn add axios``` in the frontend of our application. It is useful in order to consume the APIs
+- You must define ```baseURL``` with URL in uppercase all the letters
+- **useEffet** from ```react```- Send a request when the page is load. Example:
+```
+useEffect(() =>{
+    api.get('/connections').then(response => {
+      const {total} = response.data;
+      setTotalConnections(total);
+    })
+  }, [])
+```
+- The second element is the element when is changed (e.g. [likes]). So when this var change, the arrow function is executed.
+- Avoid reload the page with submit with `e.preventDefault();`
+- In order to handle state var array, we had to create the following code:
+```
+function setScheduleItemValue(position: number, field: string, value: string) {
+    const updatedScheduleItems = scheduleItems.map((scheduleItem, index) => {
+      if (index === position) {
+        // return the scheduleItem, replacing the `field` field 
+        return { ...scheduleItem, [field]: value };
+      }
+      return scheduleItem;
+    });
+
+    setScheduleItems(updatedScheduleItems);
+  }
+```    
+- So, this method update only the position in the scheduleItems. Note the `[``]` around the field. This represent a variable. 
+- **Redirect user after an action**  - `import  {useHistory} from 'react-router-dom'` - `history.push('/');` - send user to Landing page
+
+ 
+
+
