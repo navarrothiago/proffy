@@ -230,6 +230,89 @@ function setScheduleItemValue(position: number, field: string, value: string) {
 - So, this method update only the position in the scheduleItems. Note the `[``]` around the field. This represent a variable. 
 - **Redirect user after an action**  - `import  {useHistory} from 'react-router-dom'` - `history.push('/');` - send user to Landing page
 
+# Day 4
+
+## Instalation
+
+- [expo](https://expo.io/) - `yarn global add expo-cli` or `sudo npm install -g expo-cli` - wait a little bit
+  - with expo tools, services, and react, you can build, deploy, and quickly iterate on native android, ios, and web apps from the same javascript codebase
+  - caso a instalação da expo-cli como global no yarn apareça que ocorreu com sucesso mas ao tentar utilizar o expo diz que o comando não existe, verifique no linux e no macos se você adicionou a linha `export path="$path:`yarn global bin`"` ao arquivo de configuração do seu terminal.
+- Create expo black template integrated with TS - `expo init mobile`
+- After that, execute `yarn start` in `mobile` folder 
+  - A new windown will be open. It seems lik a **webpack** in React
+  - This screen is useful to see the logs, which mobile is connected in our screen
+  - There will be ip address for testing
+  - You need to download the **expo-client** in your smartphone 
+  - After that, open the camera of your smarthphone
+  - Scan the QR Code (a popup will be shown in order to open tha expo-client app)
+  - Now you source and the app running in your mobile is sync. Try to change the App.tsx
+
+## React Native x React JS
+
+- We can reuse about 90% of the code
+- The components is the same - function returning a XML-like (a.k.a JSX)
+- In React Native, we dont use the HTML tag, like div, p, main. We use component of the React Native 
+  - A block is a **View** and a text is a **Text**
+- In Rect Native, we dont have a style like **CSS** files
+  - A **StyleSheet** is a object of the JS
+  - A inherits style does not exist (Exception **Text** component). You have to apply each style into a element
+  - A **-** does not exist. Remove it as uppercase the next letter
+- All elements have **display: flex** by default
+- The **flexDirection** is column by default (because of the direction of the screen). In web, is row
+- We have to declare to React Native the extesions, like png in a file `@type/inde.d.ts`: `declare module '*.png';`
+
+
+## Coding
+
+### Building Landing Page
+
+- Density of images
+- How to return two elements in React? 
+  - Wrapping it with other element, like View (but you create another element)
+  - Create a **fragment** ( a empty tag **<>** )
+- Some padding is applied correct using image
+  - It is beacause the image does not adapt the space available
+  - We could apply a styles below:
+
+```
+  banner: {
+    width: '100%',
+    // Resize the image and all content must be available.
+    resizeMode:'contain'
+  },
  
+```
+- Fonts: `expo install expo-font @expo-google-fonts/archivo @expo-google-fonts/poppins`
+- See https://github.com/expo/google-fonts to use it in our code
+- **SplashScrenn** - `import {AppLoading} from 'expo';` 
+- **TouchableOpacity** - when you press the button, it turns the opacity
+- Diego does not like to work with variable to store the color value. We could also use **Styled Components**
+
+### Navigation
+
+#### Stack Navigation
+
+- **[React Navigation](https://reactnavigation.org/docs/getting-started)** 
+  - `npm install @react-navigation/native`
+  - `expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view`
+  - `npm install @react-navigation/stack`
+- Create a routes folder. There will be two routes: 
+  - one for stack navigation
+    - one for tab navigation
+- Good practice - `import { ReactButton } from 'react-native-gesture-handler';`
+  - It will adapt the button according with the OS that is running
+
+#### Tab Navigation
+
+- Install - `npm install @react-navigation/bottom-tabs`
+- Cascade navigation
+- The `<NavigationContainer>` appears only once in our code and outter. See `AppStack`
+
+
+#### GiveClasses Page
+
+- **ImageBackground** - It must be pass a size of the image. 
+  - The `resizeMode: 'contain'` can be declare inside the ImageBackground tag, not in style file
+    - All the image fill the screen
 
 
