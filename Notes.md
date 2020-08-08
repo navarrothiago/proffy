@@ -315,4 +315,156 @@ function setScheduleItemValue(position: number, field: string, value: string) {
   - The `resizeMode: 'contain'` can be declare inside the ImageBackground tag, not in style file
     - All the image fill the screen
 
+# Day 5
 
+## React Native x React JS
+ 
+- In React Native, you have to declare the all properties of the border (e.g., color, radius, width) separetaly
+- The images is not shown until you define a heigth and width of it in React Native
+
+## Coding
+
+- **ScrowView**
+  - **contentContainerStyle** - We can apply styles in our content ScrowView and it is good to apply padding
+- `children` - pass JSX elements to a component. Exemple:
+```
+const PageHeader: React.FC<PageHeaderProps> = ({ title, children }) => {
+
+  const { navigate } = useNavigation();
+
+  function handleGoBack() {
+    navigate('Landing');
+
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.topBar}>
+        <BorderlessButton onPress={handleGoBack}>
+          <Image source={backIcon} resizeMode="contain"></Image>
+        </BorderlessButton>
+
+        <Image source={logoImg} resizeMode="contain"></Image>
+      </View>
+
+      <Text style={styles.title}> {title} </Text>
+
+      {children}
+
+    </View>
+  );
+}
+```
+- If you dont put this children, when eu pass a component in PageHeader, for instance, **it will not be shown** (trust me, I stuck a lot of time on it)
+- **Picker** - Select element - It is good to render this element inside a **Modal**
+- **[IonIcons](https://ionicons.com/)**
+- **[FetherIcons](https://feathericons.com/)**
+- How to pass a image to our page header in order to show along the title?
+  - **ReactNode** - you receive a component as a property
+
+## Connect to API
+
+- **Axios** - `npm add axios` - package to make to connection with our API
+```
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'exp://192.168.15.6:3333'
+
+})
+```
+
+## Saving input values from TextInput
+
+- In **React**, we use `onChange`, but we use `onChangeText` in **ReactNative**
+```
+// ReactNative
+<TextInput
+  style={styles.input}
+  value={subject}
+  onChangeText={text => setSubject(text)}
+  placeholder="Qual a matéria?"
+  placeholderTextColor='#c1bccc'
+></TextInput>
+
+// React
+<Select
+  name="subject"
+  label="Matéria"
+  value={subject}
+  onChange={(e) => {setSubject(e.target.value)}}
+  options={[
+    { value: 'Artes', label: 'Artes' },
+    { value: 'Biologia', label: 'Biologia' },
+    { value: 'Ciência', label: 'Ciência' },
+    { value: 'Geografia', label: 'Geografia' },
+    { value: 'Historia', label: 'Historia' },
+  ]}>
+```
+- **Deep Linking** - When you open an app from another app.
+  - In **ReactNative**, we have a module called **Linking** to do this job
+  - URL - whatsapp - see https://stackoverflow.com/questions/35995775/whatsapp-deep-link-to-a-specific-mobile-number
+```  
+function handleLinkToWhatsapp(){
+    // <a href="whatsapp://send?text=Hello World!&phone=+9198********1">Ping me on WhatsApp</a>
+    Linking.openURL(`whatsapp://send?&phone=${teacher.whatsapp}`)
+  }
+```  
+
+## Database 
+
+- Expo **[AsyncStorage](https://docs.expo.io/versions/latest/sdk/async-storage/)** - `expo install @react-native-community/async-storage`  
+- **Always storage in a state everything that is handled by the user**
+- See a exemple of **Set** and **Get** elements from database (AsyncStorage)
+```
+async function handleToggleFavorite() {
+    // Adds to favorite.
+    const favorites = await AsyncStorage.getItem('favorites');
+    let favoritesArray = [];
+
+    if (isFavorited) {
+      // Remove from favorites.
+      const favoriteIndex = favoritesArray.findIndex( (teacherItem:Teacher) =>{
+        return teacherItem.id === teacher.id;
+      });
+
+      favoritesArray.slice(favoriteIndex);
+      setIsFavorited(false);
+    } else {
+
+      if (favorites) {
+        const favoritesArray = JSON.parse(favorites);
+      }
+      favoritesArray.push(teacher);
+      setIsFavorited(true);
+      await AsyncStorage.setItem('favorites', JSON.stringify(favoritesArray));
+    }
+  }
+```
+```
+function loadFavorites(){
+        // It is not a Relational Database.
+    // Store only text. Use JSON.
+    AsyncStorage.getItem('favorites').then(response => {
+      if (response) {
+        const favoriteTeachers = JSON.parse(response);
+        const favoriteTeachersIds = favoriteTeachers.map((teacher:Teacher) => {
+          return teacher.id;
+        })
+        setFavorites(favoriteTeachersIds);
+      }
+    });
+  }
+```
+- It is important to say that if you are using tab navigation (**React Navigation**), when you request the landing page, all the page (tabs) are loaded. So, if you use one tab to insert a data in database and the other tab is to see the elements that what was inserted, you must reload the page
+  - So, **useEffect** load only once if you pass a empty arg
+  - Instead, you can use **useFocusEffect** and **Context** (the last one was not approached in this course. It is use to control information independetly of the components that you are using).
+
+
+## TODO 
+
+- Use **[Context](https://reactjs.org/docs/context.html)** to manage the elements
+- Use **[Redux](https://redux.js.org/)**
+- Check the [differeces](https://academind.com/learn/react/redux-vs-context-api/)
+- Use **Styled Components**
+- Check more in Diego [notes](https://www.notion.so/Vers-o-2-0-Proffy-eefca1b981694cd0a895613bc6235970)
